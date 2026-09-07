@@ -2,7 +2,7 @@
 
 Prisma is an interactive digital experience built around creative collaboration, visual experimentation, and computational art.
 
-The website combines cinematic scroll-driven visuals, WebGL, glassmorphism, smooth scrolling, and interactive 3D elements.
+The website combines cinematic scroll-driven visuals, WebGL, glassmorphism, smooth scrolling, interactive 3D elements, and the Solstice visual experience.
 
 ## ✨ Features
 
@@ -27,10 +27,32 @@ The website combines cinematic scroll-driven visuals, WebGL, glassmorphism, smoo
 - WebGL
 - GLSL Shaders
 
+## 🌐 Links
+
+- **Live Website:** https://lightscroll.netlify.app/
+- **GitHub Repository:** https://github.com/SanwalBhatti2904/new-workflow
+
 ## 🚀 Run Locally
 
-Clone the repository and open the project with a local development server.
-
 ```bash
-git clone YOUR_REPOSITORY_URL
-cd prisma
+git clone https://github.com/SanwalBhatti2904/new-workflow.git
+cd new-workflow
+```
+
+Run the project with a local development server such as VS Code Live Server.
+
+> The project uses local image frames and a `.glb` model, so a local development server is recommended instead of opening `index.html` directly.
+
+## 📁 Project Structure
+
+```text
+index.html
+style.css
+script.js
+person/
+assets/
+```
+
+## License
+
+Created as a creative web experience for Prisma.
