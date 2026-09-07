@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prisma — For the curious</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Smooth scrolling + timeline animation -->
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <!-- Three.js CDN for 3D Bento Models -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GLTFLoader (same r128 build) — loads the Tripo3D-exported .glb into the hero bento card -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  </head>
+  <body>
+    <!-- SITE BOOT LOADER: waits for visual frames, fonts and WebGL to initialise -->
+    <div id="site-loader" aria-live="polite" aria-label="Loading Prisma">
+      <div class="site-loader-inner">
+        <div class="site-loader-mark">PRISMA<span>*</span></div>
+        <div class="site-loader-track"><div id="site-loader-fill"></div></div>
+        <div class="site-loader-meta">
+          <span id="site-loader-status">INITIALISING VISUAL SYSTEMS</span>
+          <span id="site-loader-percent">0%</span>
+        </div>
+      </div>
+    </div>
+    <!-- ==========================================
+       PART 1: ORIGINAL PRISMA SCROLL ANIMATION
+     ========================================== -->
+    <div class="part-one-wrapper">
+      <canvas id="bg-canvas"></canvas>
+      <div class="scrim"></div>
+      <div class="vignette"></div>
+
+      <header class="hero">
+        <nav class="nav">
+          <a href="#" class="rise">Our story</a>
+          <a href="#" class="rise">Collective</a>
+          <a href="#" class="rise">Workshops</a>
+          <a href="#" class="rise">Programs</a>
+          <a href="#" class="rise">Inquiries</a>
+        </nav>
+
+        <div class="hero-bottom">
+          <h1 class="wordmark rise">Prisma<span class="ast">*</span></h1>
+
+          <div class="hero-side">
+            <p class="sub rise">
+              Prisma is a worldwide network of visual artists, filmmakers and
+              storytellers — bound not by place or scene, but by a shared belief
+              in the power of an unusual perspective.
+            </p>
+            <a href="#" class="cta rise">
+              Join the lab
+              <span class="circle">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 12H19M19 12L13 6M19 12L13 18"
+                    stroke="#f3efe6"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="section" data-reveal>
+          <p class="eyebrow">the network</p>
+          <h2>A collective built around perspective, not location.</h2>
+          <p class="lead">
+            Three doors in — pick whichever one fits where you are right now.
+          </p>
+
+          <div class="cards">
+            <div class="card">
+              <p class="num">01</p>
+              <h3>The residency</h3>
+              <p>
+                Six weeks, one idea, a room of people who will tell you the
+                truth about it.
+              </p>
+            </div>
+            <div class="card">
+              <p class="num">02</p>
+              <h3>The workshops</h3>
+              <p>
+                Small, hands-on, taught by people still doing the work, not
+                talking about it.
+              </p>
+            </div>
+            <div class="card">
+              <p class="num">03</p>
+              <h3>The archive</h3>
+              <p>
+                Every project, process file and dead end, open to the whole
+                collective.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="quote-band" data-reveal>
+          <p class="quote">
+            I came for the workshop. I stayed for the people who kept asking
+            better questions.
+          </p>
+          <p class="quote-attr">A Prisma resident, 2025 cohort</p>
+        </section>
+
+        <section class="section closing" data-reveal>
+          <h2>Come be curious.</h2>
+          <a href="#" class="cta">
+            Join the lab
+            <span class="circle">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12H19M19 12L13 6M19 12L13 18"
+                  stroke="#f3efe6"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+          </a>
+        </section>
+      </main>
+    </div>
+
+    <!-- ==========================================
+       PART 2: NEW LATTICE WEBGL & MODERN BENTO GRID
+     ========================================== -->
+    <div class="part-two-wrapper">
+      <canvas id="lattice-bg"></canvas>
+
+      <div class="bento-container">
+        <div class="bento-header" data-reveal>
+          <div class="header-pill">LATTICE MATRIX v2.6</div>
+          <h2>Beyond perspective: step into digital space.</h2>
+          <p class="lead">
+            Where creative vision meets computational art. Explore how we map
+            tomorrow’s visual universe.
+          </p>
+        </div>
+
+        <div class="bento-grid">
+          <!-- 3D HERO MODEL CARD -->
+          <div class="bento-card bento-hero-3d" data-reveal>
+            <div class="bento-badge">Interactive 3D Mesh</div>
+            <div class="canvas-3d-wrapper">
+              <canvas id="bento-3d-canvas"></canvas>
+            </div>
+            <div class="bento-card-content">
+              <p class="num">04 / COMPUTATIONAL ARCHIVE</p>
+              <h3>The Prism Core</h3>
+              <p>
+                A faceted crystal lattice, rendered in real time and tilting to
+                follow your cursor through the mesh.
+              </p>
+            </div>
+          </div>
+
+          <!-- STATS & SHADER CARD -->
+          <div class="bento-card bento-stat" data-reveal>
+            <div class="stat-number">34+</div>
+            <div class="stat-label">Global Creative Nodes</div>
+            <p class="num">05 / NETWORK</p>
+            <p>
+              Decentralized digital spaces connecting artists across 34
+              countries.
+            </p>
+          </div>
+
+          <!-- MENTORSHIP CARD -->
+          <div class="bento-card" data-reveal>
+            <div class="pill-tag">LIVE LABS</div>
+            <p class="num">06 / MENTORSHIP</p>
+            <h3>Shader Matrix</h3>
+            <p>
+              Mastering code as a creative medium through real-time WebGL
+              workshops.
+            </p>
+          </div>
+
+          <!-- QUOTE BENTO -->
+          <div class="bento-card bento-quote" data-reveal>
+            <span class="quote-mark">“</span>
+            <p class="quote">
+              We built an infinitely expandable canvas for digital visionaries.
+            </p>
+            <p class="quote-attr">— Lead Systems Engineer, Prisma Labs</p>
+          </div>
+
+          <!-- FEATURE HIGHLIGHT CARD -->
+          <div class="bento-card bento-accent" data-reveal>
+            <p class="num">07 / ARCHITECTURE</p>
+            <h3>60 FPS WebGL Engine</h3>
+            <p>
+              Custom fragment shaders delivering smooth spatial depth and
+              reactivity.
+            </p>
+          </div>
+
+          <!-- ARCHIVE ACCESS CARD -->
+          <div class="bento-card" data-reveal>
+            <p class="num">08 / ACCESS</p>
+            <h3>Open Archive</h3>
+            <p>
+              Every render pass, wireframe and process file, browsable by the
+              full collective.
+            </p>
+          </div>
+
+          <!-- STRUCTURE CARD -->
+          <div class="bento-card" data-reveal>
+            <p class="num">09 / STRUCTURE</p>
+            <h3>Async by Design</h3>
+            <p>
+              No studio, no timezone — the lattice runs wherever its nodes are.
+            </p>
+          </div>
+
+          <!-- FINAL CALL TO ACTION BENTO -->
+          <div class="bento-card bento-cta-card" data-reveal>
+            <h2>Ready to map your vision?</h2>
+            <a href="#" class="cta">
+              Explore the matrix
+              <span class="circle">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 12H19M19 12L13 6M19 12L13 18"
+                    stroke="#f3efe6"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+       PART 3: DAWN / EPILOGUE
+     ========================================== -->
+    <!-- ==========================================
+       PART 3: SOLSTICE / PRISMA DAWN EPILOGUE
+       ========================================== -->
+    <div class="part-three-wrapper">
+      <canvas id="sol-scene"></canvas>
+      <div class="sol-edge-fade"></div>
+
+      <div class="header-pill sol-pill" data-reveal>10 / SOLSTICE</div>
+
+      <div class="sol-headline" data-reveal>
+        <span class="sol-l1">Begin,</span>
+        <span class="sol-l2">before the noise.</span>
+      </div>
+
+      <div class="sol-description" data-reveal>
+        The best ideas often arrive before the room gets loud. Solstice is
+        Prisma's quiet final frame — a study of light, attention and the unusual
+        angle.
+      </div>
+
+      <div class="sol-features" data-reveal>
+        <div class="sol-line"><b>5:40 AM</b> · first light</div>
+        <div class="sol-line"><b>Six weeks</b> · one idea</div>
+        <div class="sol-line"><b>34 nodes</b> · one collective</div>
+      </div>
+
+      <div class="sol-ctas" data-reveal>
+        <a href="#" class="cta sol-cta-primary">
+          Join the lab
+          <span class="circle">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 12H19M19 12L13 6M19 12L13 18"
+                stroke="#f3efe6"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+        </a>
+        <a href="#" class="sol-btn-ghost">Return to the archive</a>
+      </div>
+
+      <div class="sol-outro" data-reveal>The work,<br />before the noise.</div>
+
+      <div class="sol-horizon" data-reveal>
+        <span class="sol-chip">
+          <span data-count-to="34">0</span> NODES · ONE SUNRISE
+        </span>
+      </div>
+
+      <div id="sol-sunWrap">
+        <div id="sol-sunTilt" data-reveal>
+          <div id="sol-sunDisc">
+            <div id="sol-sunCore"></div>
+          </div>
+          <div id="sol-sunShadow"></div>
+        </div>
+      </div>
+
+      <script type="x-shader/x-vertex" id="sol-vertexShader">
+        #version 300 es
+        out vec2 v_uv;
+        void main(){
+          vec2 pos = vec2(
+            (gl_VertexID == 2) ? 3.0 : -1.0,
+            (gl_VertexID == 1) ? 3.0 : -1.0
+          );
+          v_uv = pos * 0.5 + 0.5;
+          gl_Position = vec4(pos, 0.0, 1.0);
+        }
+      </script>
+
+      <script type="x-shader/x-fragment" id="sol-fragmentShader">
+        #version 300 es
+        precision highp float;
+        in vec2 v_uv;
+        out vec4 outColor;
+        uniform vec2 u_resolution;
+        uniform float u_time;
+        uniform vec2 u_sun;
+        uniform float u_settled;
+        const float HORIZON = 0.42;
+
+        float hash21(vec2 p){
+          p = fract(p * vec2(123.34,456.21));
+          p += dot(p,p + 45.32);
+          return fract(p.x * p.y);
+        }
+        float noise(vec2 p){
+          vec2 i=floor(p), f=fract(p);
+          f=f*f*(3.0-2.0*f);
+          float a=hash21(i), b=hash21(i+vec2(1.0,0.0));
+          float c=hash21(i+vec2(0.0,1.0)), d=hash21(i+vec2(1.0,1.0));
+          return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);
+        }
+        float fbm(vec2 p){
+          float v=0.0, amp=0.5;
+          for(int i=0;i<5;i++){ v+=amp*noise(p); p*=2.02; amp*=0.5; }
+          return v;
+        }
+        void main(){
+          vec2 uv=v_uv;
+          float aspect=u_resolution.x/max(u_resolution.y,1.0);
+          vec2 dSun=vec2((uv.x-u_sun.x)*aspect,uv.y-u_sun.y);
+          float distSun=length(dSun);
+
+          vec3 iceSky=vec3(0.020,0.024,0.043);
+          vec3 dawnIn=vec3(1.0,0.706,0.362);
+          vec3 dawnOut=vec3(0.910,0.416,0.227);
+          float pool=exp(-distSun*3.2);
+          vec3 dawnMix=mix(dawnOut,dawnIn,clamp(exp(-distSun*6.0),0.0,1.0));
+          vec3 skyColor=mix(iceSky,dawnMix,clamp(pool,0.0,1.0));
+
+          float drift=u_settled>0.5?0.0:u_time;
+          float fogN1=fbm(vec2(uv.x*2.2+drift*0.015,0.0));
+          float band1=smoothstep(0.09,0.0,abs(uv.y-0.66))*(0.10+fogN1*0.10);
+          float fogN2=fbm(vec2(uv.x*2.6-drift*0.011+8.0,0.0));
+          float band2=smoothstep(0.07,0.0,abs(uv.y-0.80))*(0.07+fogN2*0.08);
+          skyColor=mix(skyColor,iceSky,clamp(band1+band2,0.0,0.6));
+
+          float depthDen=max(HORIZON-uv.y,0.0015);
+          float z=0.10/depthDen;
+          float scroll=u_settled>0.5?0.0:u_time*0.06;
+          vec2 world=vec2((uv.x-0.5)*z,z*2.2-scroll);
+          vec2 sc=vec2(world.x*0.30,world.y);
+          float h=fbm(sc*2.0);
+          float dirFactor=clamp((u_sun.x-uv.x)*4.0,-1.0,1.0);
+          vec3 snowLit=vec3(0.98,0.93,0.80);
+          vec3 snowShadow=vec3(0.040,0.045,0.070);
+          vec3 snow=mix(snowShadow,snowLit,0.5+0.5*dirFactor);
+          snow=mix(snow,snow*1.12,clamp(h,0.0,1.0));
+          snow=mix(snow,dawnMix,clamp(pool*0.35,0.0,0.28));
+
+          if(u_settled<0.5){
+            vec2 cellUV=sc*26.0+floor(u_time*2.0);
+            vec2 cell=floor(cellUV);
+            float glint=step(0.997,hash21(cell+11.0));
+            snow+=glint*0.55*smoothstep(0.35,0.9,h);
+          }
+
+          float skyMask=smoothstep(HORIZON-0.004,HORIZON+0.004,uv.y);
+          vec3 color=mix(snow,skyColor,skyMask);
+
+          float elevFactor=smoothstep(HORIZON-0.02,HORIZON+0.16,u_sun.y);
+          float disc=smoothstep(0.030,0.024,distSun);
+          vec3 sunTint=vec3(1.0,0.95,0.86);
+          color=mix(color,sunTint,disc);
+          color+=sunTint*exp(-distSun*7.5)*0.55*elevFactor;
+
+          float haloRadius=0.30, ringWidth=0.007;
+          float ringMask=smoothstep(ringWidth,0.0,abs(distSun-haloRadius));
+          float angle=atan(dSun.y,dSun.x);
+          float dogFactor=pow(abs(cos(angle)),10.0)*2.2;
+          float arcFactor=pow(max(sin(angle),0.0),7.0)*1.7;
+          float haloBrightness=ringMask*(0.35+dogFactor+arcFactor)*elevFactor;
+          float innerEdge=smoothstep(haloRadius,haloRadius-ringWidth*2.2,distSun);
+          vec3 haloTint=mix(vec3(1.0),vec3(0.851,0.416,0.290),innerEdge);
+          color+=haloTint*haloBrightness*0.9;
+
+          float pillarWidth=0.012;
+          float pillarMask=smoothstep(pillarWidth,0.0,abs(uv.x-u_sun.x));
+          float distBelow=max(u_sun.y-uv.y,0.0);
+          color+=sunTint*pillarMask*exp(-distBelow*2.2)*elevFactor*0.45;
+
+          outColor=vec4(clamp(color,0.0,1.0),1.0);
+        }
+      </script>
+    </div>
+
+    <footer class="footer">
+      <span class="footer-word">Prisma* Matrix</span>
+      <span class="footer-copy">© 2026 Prisma. All curiosity reserved.</span>
+      <div class="footer-links">
+        <a href="#">Instagram</a>
+        <a href="#">Newsletter</a>
+        <a href="#">Contact</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
